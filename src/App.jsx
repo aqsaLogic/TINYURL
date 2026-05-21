@@ -1,9 +1,9 @@
 import { useState } from "react";
 import TinyURLPage from "./TinyURL.jsx";
 import PlansPage from "./pages/Planspage.jsx";
-import FeaturesPage from "./pages/FeaturesPage.jsx";
-import DomainsPage from "./pages/DomainsPage.jsx";
-import ResourcesPage from "./pages/ResourcesPage.jsx";
+import FeaturesPage from "./pages/Featurespage.jsx";
+import DomainsPage from "./pages/Domainspage.jsx";
+import ResourcesPage from "./pages/Resourcespage.jsx";
 
 export default function App() {
   const [page, setPage] = useState("home");
