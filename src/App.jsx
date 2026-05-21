@@ -1,5 +1,22 @@
+import { useState } from "react";
 import TinyURLPage from "./TinyURL";
+import PlansPage from "./pages/Planspage";
+import FeaturesPage from "./pages/FeaturesPage";
+import DomainsPage from "./pages/DomainsPage";
+import ResourcesPage from "./pages/ResourcesPage";
 
 export default function App() {
-  return <TinyURLPage />;
+  const [page, setPage] = useState("home");
+
+  const navigate = (p) => {
+    setPage(p);
+    window.scrollTo(0, 0);
+  };
+
+  if (page === "plans")     return <PlansPage     onNavigate={navigate} />;
+  if (page === "features")  return <FeaturesPage  onNavigate={navigate} />;
+  if (page === "domains")   return <DomainsPage   onNavigate={navigate} />;
+  if (page === "resources") return <ResourcesPage onNavigate={navigate} />;
+
+  return <TinyURLPage onNavigate={navigate} />;
 }

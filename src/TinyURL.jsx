@@ -6,7 +6,7 @@ import image4 from "./assets/image4.png";
 import featureImg from "./assets/featureImg.png"
 
 // Header
-function Header() {
+function Header({ onNavigate }) {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <header className="bg-[#054260] py-4 sticky top-0 z-50 border-b border-gray-700">
@@ -14,9 +14,12 @@ function Header() {
         <div className="flex items-center gap-10">
           <a href="#" className="text-2xl font-extrabold text-gray-200 tracking-tight">TINYURL</a>
           <nav className="hidden md:flex gap-8">
-            {["Plans", "Features", "Domains", "Resources"].map((item) => (
-              <a key={item} href="#" className="text-sm font-medium text-gray-200 hover:text-teal-400 transition-colors">{item}</a>
-            ))}
+         {["Plans", "Features", "Domains", "Resources"].map((item) => (
+  <button key={item} onClick={() => onNavigate(item.toLowerCase())}
+    className="text-sm font-medium text-gray-200 hover:text-teal-400 transition-colors">
+    {item}
+  </button>
+))}
           </nav>
         </div>
         <div className="hidden md:flex items-center gap-4">
@@ -54,13 +57,27 @@ function Hero() {
   const [shortUrl, setShortUrl] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const handleShorten = (e) => {
-    e.preventDefault();
-    if (!longUrl) return;
-    const code = alias || Math.random().toString(36).substring(2, 8);
-    setShortUrl(`https://tinyurl.com/${code}`);
-    setCopied(false);
-  };
+  const handleShorten = async (e) => {
+  e.preventDefault();
+  if (!longUrl) return;
+
+  try {
+    const res = await fetch("http://localhost:5050/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ longUrl }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      setShortUrl(data.shortURL);
+      setCopied(false);
+    } else {
+      alert("Error shortening URL");
+    }
+  } catch (err) {
+    alert("Backend is not working! node index.js run karo");
+  }
+};
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shortUrl);
@@ -132,7 +149,7 @@ function Hero() {
               <div className="flex-1">
                 <label className="block text-xs font-medium text-gray-600 mb-2">Domain</label>
                 <div className="flex items-center border border-gray-200 rounded-md px-3 bg-gray-50">
-                  <svg className="text-gray-400 mr-2 flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg className="text-gray-400 mr-2 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="2" y1="12" x2="22" y2="12"></line>
                     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -411,10 +428,10 @@ function Footer() {
 }
 
 // Page 
-export default function TinyURLPage() {
+export default function TinyURLPage({ onNavigate }) {
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header onNavigate={onNavigate} />
       <Hero />
       <PlansSection />
       <FeatureSection />
