@@ -72,10 +72,10 @@ function Hero() {
       setShortUrl(data.shortURL);
       setCopied(false);
     } else {
-      alert("Error shortening URL");
+      alert("Error: " + data.error);
     }
   } catch (err) {
-    alert("Backend is not working! node index.js run karo");
+    alert("Error connecting to server!");
   }
 };
 
