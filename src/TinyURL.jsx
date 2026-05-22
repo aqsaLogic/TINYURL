@@ -62,7 +62,7 @@ function Hero() {
   if (!longUrl) return;
 
   try {
-    const res = await fetch("http://localhost:5050/save", {
+    const res = await fetch("tbackend-production-1ca1.up.railway.app/save", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ longUrl }),
